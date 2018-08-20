@@ -13,4 +13,13 @@ def teardown_appcontext(self):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, threaded=True)
+    if HBNB_API_HOST is not None:
+        hosts = HBNB_API_HOST
+    else:
+        hosts = '0.0.0.0'
+
+    if HBNB_API_PORT is not None:
+        ports = HBNB_API_PORT
+    else:
+        ports = 5000
+    app.run(host=hosts, port=ports, threaded=True)
