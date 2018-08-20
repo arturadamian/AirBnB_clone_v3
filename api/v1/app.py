@@ -9,7 +9,6 @@ import os
 
 
 app = Flask(__name__)
-app_views = Blueprint('app_views', __name__)
 app.register_blueprint(app_views)
 
 
