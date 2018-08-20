@@ -124,6 +124,8 @@ class test_DBStorage(unittest.TestCase):
 
     def test_get_db_storage(self):
         """This test the get method in db_storage"""
+        new_state = State(name="NewYork")
+        storage.new(new_state)
         first_state_id = list(storage.all("State").values())[0].id
         self.assertEqual(type(storage.get("State", first_state_id)), State)
 
