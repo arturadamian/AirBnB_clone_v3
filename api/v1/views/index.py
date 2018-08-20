@@ -19,16 +19,11 @@ def stats():
                  "reviews": 0,
                  "states": 0,
                  "users": 0}
-    name_dict = {"Amenity": "amenities",
-                  "City": "cities",
-                  "Place": "places",
-                  "Review": "reviews",
-                  "State": "states",
-                  "User": "users"}
-    for obj in name_dict:
+    class_name = ["Amenity", "City", "Place", "Review", "State", "User"]
+    stat_name = ["amenities", "cities", "places", "reviews", "states", "users"]
+    for i in range(len(class_name)):
         try:
-            stat_dict[name_dict[obj]] = models.storage.count(
-                models.classes(obj))
+            stat_dict[stat_name[i]] = models.storage.count(class_name[i])
         except Exception:
             continue
     return jsonify(stat_dict)
