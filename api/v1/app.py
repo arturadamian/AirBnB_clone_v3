@@ -9,6 +9,7 @@ import os
 
 
 app = Flask(__name__)
+app.url_map.strict_slashses = False
 app.register_blueprint(app_views)
 
 

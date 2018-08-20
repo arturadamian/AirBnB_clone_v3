@@ -99,7 +99,7 @@ class DBStorage:
         """
         objs = self.__session.query(models.classes[cls]).all()
         for obj in objs:
-            if obj.id == id:
+            if obj.id == str(id):
                 return obj
         return None
 
