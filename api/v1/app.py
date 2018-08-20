@@ -4,7 +4,7 @@ Creates a blueprint for flask
 """
 from models import storage
 from api.v1.views import app_views
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, jsonify
 import os
 
 
@@ -18,6 +18,13 @@ def teardown_appcontext(self):
     Created teardown for closing storage
     """
     storage.close()
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """
+    404 error page in JSON
+    """
+    return jsonify({"error": "Not Found"}), 404
 
 
 if __name__ == "__main__":
