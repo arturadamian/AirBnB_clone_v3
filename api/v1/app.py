@@ -2,9 +2,10 @@
 """
 Creates a blueprint for flask
 """
-from models import storage, Blueprint
+from models import storage
 from api.v1.views import app_views
-from flask import Flask
+from flask import Flask, Blueprint
+import os
 
 
 app = Flask(__name__)
@@ -24,13 +25,13 @@ if __name__ == "__main__":
     """
     sets the port and host name depending on input
     """
-    if HBNB_API_HOST is not None:
-        hosts = HBNB_API_HOST
+    if os.getenv("HBNB_API_HOST") is not None:
+        hosts = os.getenv("HBNB_API_HOST")
     else:
         hosts = '0.0.0.0'
 
-    if HBNB_API_PORT is not None:
-        ports = HBNB_API_PORT
+    if os.getenv("HBNB_API_PORT") is not None:
+        ports = os.getenv("HBNB_API_PORT")
     else:
         ports = 5000
     app.run(host=hosts, port=ports, threaded=True)
