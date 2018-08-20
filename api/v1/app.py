@@ -9,7 +9,6 @@ import os
 
 
 app = Flask(__name__)
-app_views = Blueprint('app_views', __name__)
 app.register_blueprint(app_views)
 
 
@@ -25,13 +24,6 @@ if __name__ == "__main__":
     """
     sets the port and host name depending on input
     """
-    if os.getenv("HBNB_API_HOST") is not None:
-        hosts = os.getenv("HBNB_API_HOST")
-    else:
-        hosts = '0.0.0.0'
-
-    if os.getenv("HBNB_API_PORT") is not None:
-        ports = os.getenv("HBNB_API_PORT")
-    else:
-        ports = 5000
+    hosts = os.getenv("HBNB_API_HOST", default='0.0.0.0')
+    ports = int(os.getenv("HBNB_API_PORT", default=5000))
     app.run(host=hosts, port=ports, threaded=True)
