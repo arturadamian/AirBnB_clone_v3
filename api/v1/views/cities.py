@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""creates a route"""
+"""Create City objects that handles all default RestFul API actions"""
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
@@ -90,7 +90,7 @@ def put_city(city_id):
         abort(404)
     if not request.json:
         return jsonify({"error": "Not a JSON"}), 400
-    json = request.json
+    json = request.get_json()
     for key, value in json.items():
         if key != "id" and key != "created_at" and key != "updated_at":
             setattr(city, key, value)
