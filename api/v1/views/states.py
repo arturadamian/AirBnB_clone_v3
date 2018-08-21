@@ -13,7 +13,7 @@ def grab_states():
         a list of objects
     """
     state_list = []
-    for k, v in storage.all("State").items():
+    for v in storage.all("State").values():
         state_list.append(v.to_dict())
     return jsonify(state_list)
 
@@ -67,7 +67,6 @@ def posting_states():
         if not request.json:
             return jsonify({"error": "Not a JSON"}), 400
         data = request.get_json()
-        print(data)
         if "name" not in data:
             return jsonify({"error": "Missing name"}), 400
         new_obj = State(name=data["name"])
