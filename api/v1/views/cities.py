@@ -85,6 +85,7 @@ def put_city(city_id):
     Returns:
         jsonified version of updates city
     """
+    ignore = ["id", "state_id", "created_at", "updated_at"]
     city = storage.get("City", city_id)
     if not city:
         abort(404)
@@ -92,7 +93,7 @@ def put_city(city_id):
         return jsonify({"error": "Not a JSON"}), 400
     json = request.get_json()
     for key, value in json.items():
-        if key != "id" and key != "created_at" and key != "updated_at":
+        if key not in ignore:
             setattr(city, key, value)
     city.save()
     return jsonify(city.to_dict()), 200

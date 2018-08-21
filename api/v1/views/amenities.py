@@ -36,7 +36,7 @@ def get_amenity_object(amenity_id):
 def delete_amenity_object(amenity_id):
     """Deletes a Amenity object
     Args:
-        city_id: id of the amenity in uuid format
+        amenity_id: id of the amenity in uuid format
     Return:
         jsonified version of empty dictionary with status code 200
     """
@@ -72,10 +72,11 @@ def post_amenity():
 def put_amenity(amenity_id):
     """Updates a Amenity object
     Args:
-        city_id: id of the amenity in uuid format
+        amenity_id: id of the amenity in uuid format
     Returns:
         jsonified version of updates amenity
     """
+    ignore = ["id", "created_at", "updated_at"]
     amenity = storage.get("Amenity", amenity_id)
     if not amenity:
         abort(404)
@@ -83,7 +84,7 @@ def put_amenity(amenity_id):
         return jsonify({"error": "Not a JSON"}), 400
     json = request.get_json()
     for key, value in json.items():
-        if key != "id" and key != "created_at" and key != "updated_at":
+        if key not in ignore:
             setattr(amenity, key, value)
     amenity.save()
     return jsonify(amenity.to_dict()), 200
