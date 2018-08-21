@@ -6,9 +6,11 @@ from models import storage
 from api.v1.views import app_views
 from flask import Flask, Blueprint, jsonify
 import os
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 app.url_map.strict_slashes = False
 app.register_blueprint(app_views)
 
@@ -27,6 +29,7 @@ def page_not_found(e):
     404 error page in JSON
     """
     return jsonify({"error": "Not Found"}), 404
+
 
 
 if __name__ == "__main__":
