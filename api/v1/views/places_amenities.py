@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Create Place objects that handles all default RestFul API actions"""
 from api.v1.views import app_views
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from models import storage
 from models import Place
 from models import Amenity
@@ -45,13 +45,15 @@ def delete_place_amenity_object(place_id, amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        place_amenity = place.amenities
-    else:
-        place_amenity = place.amenity_ids
+    place_amenity = place.amenities
+    place_amenity = list(amen for amen in place_amenity if
+                         amen.id == amenity_id)
     if amenity not in place_amenity:
         abort(404)
-    place_amenity.remove(amenity)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        place.amenities.remove(place_amenity[0])
+    else:
+        place.amenity_ids.remove(place_amenity[0].id)
     place.save()
     return jsonify({}), 200
 
@@ -72,12 +74,14 @@ def post_place_amenity(place_id, amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        place_amenity = place.amenities
-    else:
-        place_amenity = place.amenity_ids
-    if amenity in place_amenity:
+    place_amenity = place.amenities
+    place_amenity = list(amen for amen in place_amenity if
+                         amen.id == amenity_id)
+    if place_amenity:
         return jsonify(amenity.to_dict()), 200
-    place_amenity.append(amenity)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        place.amenities.append(amenity)
+    else:
+        place.amenity_ids.append(amenity_id)
     place.save()
-    return jsonify(amenity.to_dict()), 201
+    return make_response(jsonify(amenity.to_dict()), 201)
