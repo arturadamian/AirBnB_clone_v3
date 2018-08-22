@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Create Place objects that handles all default RestFul API actions"""
 from api.v1.views import app_views
-from flask import jsonify, abort, request, make_response
+from flask import jsonify, abort, request
 from models import storage
 from models import Place
 from models import Amenity
@@ -86,4 +86,4 @@ def post_place_amenity(place_id, amenity_id):
     else:
         place.amenity_ids.append(amenity_id)
     place.save()
-    return make_response(jsonify(amenity.to_dict()), 201)
+    return jsonify(amenity.to_dict()), 201
