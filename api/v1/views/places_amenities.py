@@ -24,8 +24,8 @@ def get_all_amenities_by_place(place_id):
         place_amenity = place.amenities
     else:
         place_amenity = place.amenity_ids
-    for place_amenity in place_amenity:
-        amenity_list.append(place_amenity.to_dict())
+    for amenity in place_amenity:
+        amenity_list.append(amenity.to_dict())
     return jsonify(amenity_list)
 
 
