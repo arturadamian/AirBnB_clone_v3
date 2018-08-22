@@ -29,7 +29,7 @@ def page_not_found(e):
     """
     404 error page in JSON
     """
-    return jsonify({"error": "Not Found"}), 404
+    return jsonify({"error": "Not found"}), 404
 
 
 if __name__ == "__main__":
