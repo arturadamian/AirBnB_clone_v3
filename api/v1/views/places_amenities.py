@@ -32,7 +32,7 @@ def get_all_amenities_by_place(place_id):
 @app_views.route("/places/<uuid:place_id>/amenities/<amenity_id>",
                  methods=["DELETE"])
 def delete_place_amenity_object(place_id, amenity_id):
-    """Deletes a place_amenity object
+    """Deletes place_amenity object
     Args:
         place_id: id of the place in uuid format
         amenity_id: id of the amenity in uuid format
