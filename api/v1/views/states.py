@@ -21,7 +21,7 @@ def grab_states():
     return jsonify(state_list)
 
 
-@app_views.route("/states/<state_id>", methods=["GET"])
+@app_views.route("/states/<uuid:state_id>", methods=["GET"])
 def grab_state(state_id):
     """
     Retrieves a certain State
@@ -39,7 +39,7 @@ def grab_state(state_id):
         abort(404)
 
 
-@app_views.route("/states/<state_id>", methods=["DELETE"])
+@app_views.route("/states/<uuid:state_id>", methods=["DELETE"])
 def state_go_poof(state_id):
     """
     Deletes a certain State
@@ -73,13 +73,15 @@ def posting_states():
         if "name" not in data:
             return jsonify({"error": "Missing name"}), 400
         new_obj = State(name=data["name"])
+        for k, v in data.items():
+            setattr(new_obj, k, v)
         new_obj.save()
         return jsonify(new_obj.to_dict()), 201
     except Exception:
         abort(404)
 
 
-@app_views.route("/states/<state_id>", methods=["PUT"])
+@app_views.route("/states/<uuid:state_id>", methods=["PUT"])
 def alter_state(state_id):
     """
     alters an existing State object
@@ -98,4 +100,5 @@ def alter_state(state_id):
     for key, value in data.items():
         if key not in ignore:
             setattr(indiv, key, value)
+    indiv.save()
     return jsonify(indiv.to_dict()), 200
