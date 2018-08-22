@@ -31,7 +31,6 @@ def page_not_found(e):
     return jsonify({"error": "Not Found"}), 404
 
 
-
 if __name__ == "__main__":
     """
     sets the port and host name depending on input
