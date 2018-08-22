@@ -29,7 +29,7 @@ def get_all_amenities_by_place(place_id):
     return jsonify(amenity_list)
 
 
-@app_views.route("/places/<uuid:place_id>/amenities/<amenity_id>",
+@app_views.route("/places/<uuid:place_id>/amenities/<uuid:amenity_id>",
                  methods=["DELETE"])
 def delete_place_amenity_object(place_id, amenity_id):
     """Deletes a place_amenity object
@@ -39,18 +39,21 @@ def delete_place_amenity_object(place_id, amenity_id):
     Return:
         jsonified version of empty dictionary with status code 200
     """
-    try:
-        place = storage.get("Place", place_id)
-        amenity = storage.get("Amenity", amenity_id)
-        if getenv('HBNB_TYPE_STORAGE') == 'db':
-            place_amenity = place.amenities
-        else:
-            place_amenity = place.amenity_ids
-        place_amenity.remove(amenity)
-        place.save()
-        return jsonify({}), 200
-    except Exception:
+    place = storage.get("Place", place_id)
+    if place is None:
         abort(404)
+    amenity = storage.get("Amenity", amenity_id)
+    if amenity is None:
+        abort(404)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        place_amenity = place.amenities
+    else:
+        place_amenity = place.amenity_ids
+    if amenity not in place_amenity:
+        abort(404)
+    place_amenity.remove(amenity)
+    place.save()
+    return jsonify({}), 200
 
 
 @app_views.route("places/<uuid:place_id>/amenities/<uuid:amenity_id>",
@@ -63,17 +66,18 @@ def post_place_amenity(place_id, amenity_id):
     Returns:
         jsonified version of amenity objecto
     """
-    try:
-        place = storage.get("Place", place_id)
-        amenity = storage.get("Amenity", amenity_id)
-        if getenv('HBNB_TYPE_STORAGE') == 'db':
-            place_amenity = place.amenities
-        else:
-            place_amenity = place.amenity_ids
-        if amenity in place_amenity:
-            return jsonify(amenity.to_dict()), 200
-        place_amenity.append(amenity)
-        place.save()
-        return jsonify(amenity.to_dict()), 201
-    except Exception:
+    place = storage.get("Place", place_id)
+    if place is None:
         abort(404)
+    amenity = storage.get("Amenity", amenity_id)
+    if amenity is None:
+        abort(404)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        place_amenity = place.amenities
+    else:
+        place_amenity = place.amenity_ids
+    if amenity in place_amenity:
+        return jsonify(amenity.to_dict()), 200
+    place_amenity.append(amenity)
+    place.save()
+    return jsonify(amenity.to_dict()), 201
