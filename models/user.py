@@ -30,17 +30,17 @@ class User(BaseModel, Base):
         last_name = ""
 
     @property
-    def password(self):
-        """pa/ssword getter
+    def pasd(self):
+        """password getter
         Return:
             password that is set
         """
         return self.password
 
-    @password.setter
-    def password(self, password):
+    @pasd.setter
+    def pasd(self, pwd):
         """password setter
         Args:
             passwrod: input password
         """
-        self.password = md5(passwrod.ehncode()).hexdigest()
+        self.password = md5(pwd.encode()).hexdigest()
