@@ -29,6 +29,7 @@ def get_all_amenities_by_place(place_id):
     return jsonify(amenity_list)
 
 
+
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
                  methods=["DELETE"])
 def delete_place_amenity_object(place_id, amenity_id):
@@ -39,21 +40,15 @@ def delete_place_amenity_object(place_id, amenity_id):
     Return:
         jsonified version of empty dictionary with status code 200
     """
-    all_places = storage.all("Place")
-    full_id_place = "Place." + place_id
-    indiv_place = all_places.get(full_id_place)
-    all_amenities = storage.all("Amenity")
-    full_id_amenity = "Amenity." + amenity_id
-    indiv_amenity = all_amenities.get(full_id_amenity)
     try:
-        # place = storage.get("Place", place_id)
-        # amenity = storage.get("Amenity", amenity_id)
+        place = storage.get("Place", place_id)
+        amenity = storage.get("Amenity", amenity_id)
         if getenv('HBNB_TYPE_STORAGE') == 'db':
-            place_amenity = indiv_place.amenities
+            place_amenity = place.amenities
         else:
-            place_amenity = indiv_place.amenity_ids
-        place_amenity.remove(indiv_amenity)
-        indiv_place.save()
+            place_amenity = place.amenity_ids
+        place_amenity.remove(amenity)
+        place.save()
         return jsonify({}), 200
     except Exception:
         abort(404)
