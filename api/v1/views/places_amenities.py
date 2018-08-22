@@ -47,9 +47,7 @@ def delete_place_amenity_object(place_id, amenity_id):
         abort(404)
     place_amenity = place.amenities
     place_amenity = list(amen for amen in place_amenity if
-                         amen.id == amenity_id)
-    print(amenity)
-    print(place_amenity)
+                         amen.id == str(amenity_id))
     if amenity not in place_amenity:
         abort(404)
     if getenv('HBNB_TYPE_STORAGE') == 'db':
@@ -78,8 +76,8 @@ def post_place_amenity(place_id, amenity_id):
         abort(404)
     place_amenity = place.amenities
     place_amenity = list(amen for amen in place_amenity if
-                         amen.id == amenity_id)
-    if place_amenity == []:
+                         amen.id == str(amenity_id))
+    if place_amenity != []:
         return jsonify(amenity.to_dict()), 200
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         place.amenities.append(amenity)
