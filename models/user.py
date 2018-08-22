@@ -6,6 +6,7 @@ from os import getenv
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
+from hashlib import md5
 
 
 class User(BaseModel, Base):
@@ -27,3 +28,19 @@ class User(BaseModel, Base):
         password = ""
         first_name = ""
         last_name = ""
+
+    @property
+    def passwrod(self):
+        """password getter
+        Return:
+            password that is set
+        """
+        return self.password
+
+    @password.setter
+    def password(self, password):
+        """password setter
+        Args:
+            passwrod: input password
+        """
+        self.password = md5(passwrod.ehncode()).hexdigest()
