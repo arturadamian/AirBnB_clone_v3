@@ -78,6 +78,11 @@ class BaseModel:
         cp_dct['created_at'] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
         if hasattr(self, "_sa_instance_state"):
             del cp_dct["_sa_instance_state"]
+        if "_password" in cp_dct:
+            cp_dct["password"] = cp_dct["_password"]
+            cp_dct.pop("_password", None)
+        if getenv('HBNB_TYPE_STORAGE') == 'db':
+            cp_dct.pop("password", None)
         return (cp_dct)
 
     def delete(self):
