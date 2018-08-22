@@ -73,8 +73,6 @@ def posting_states():
         if "name" not in data:
             return jsonify({"error": "Missing name"}), 400
         new_obj = State(name=data["name"])
-        for k, v in data.items():
-            setattr(new_obj, k, v)
         new_obj.save()
         return jsonify(new_obj.to_dict()), 201
     except Exception:
