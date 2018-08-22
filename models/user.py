@@ -30,8 +30,8 @@ class User(BaseModel, Base):
         last_name = ""
 
     @property
-    def passwrod(self):
-        """password getter
+    def password(self):
+        """pa/ssword getter
         Return:
             password that is set
         """
