@@ -15,12 +15,12 @@ def get_all_amenities_by_place(place_id):
     Return:
         jsonified version of the amenity list
     """
-    if storage.get("Place", place_id) is None:
+    place = storage.get("Place", place_id)
+    if place is None:
         abort(404)
     amenity_list = []
-    for key, value in storage.all("Amenity").items():
-        if value.place_id == str(place_id):
-            amenity_list.append(value.to_dict())
+    for place_amenity in place.amenities:
+        amenity_list.append(place_amenity.to_dict())
     return jsonify(amenity_list)
 
 
