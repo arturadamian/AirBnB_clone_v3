@@ -29,7 +29,7 @@ def get_all_amenities_by_place(place_id):
     return jsonify(amenity_list)
 
 
-@app_views.route("/places/<uuid:place_id>/amenities/<uuid:amenity_id>",
+@app_views.route("/places/<uuid:place_id>/amenities/<amenity_id>",
                  methods=["DELETE"])
 def delete_place_amenity_object(place_id, amenity_id):
     """Deletes a place_amenity object
