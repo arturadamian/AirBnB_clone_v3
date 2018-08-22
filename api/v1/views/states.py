@@ -21,7 +21,7 @@ def grab_states():
     return jsonify(state_list)
 
 
-@app_views.route("/states/<uuid:state_id>", methods=["GET"])
+@app_views.route("/states/<state_id>", methods=["GET"])
 def grab_state(state_id):
     """
     Retrieves a certain State
@@ -39,7 +39,7 @@ def grab_state(state_id):
         abort(404)
 
 
-@app_views.route("/states/<uuid:state_id>", methods=["DELETE"])
+@app_views.route("/states/<state_id>", methods=["DELETE"])
 def state_go_poof(state_id):
     """
     Deletes a certain State
@@ -79,7 +79,7 @@ def posting_states():
         abort(404)
 
 
-@app_views.route("/states/<uuid:state_id>", methods=["PUT"])
+@app_views.route("/states/<state_id>", methods=["PUT"])
 def alter_state(state_id):
     """
     alters an existing State object
