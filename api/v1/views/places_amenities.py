@@ -22,17 +22,19 @@ def get_all_amenities_by_place(place_id):
     amenity_list = []
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         place_amenity = place.amenities
+        for amenity in place_amenity:
+            amenity_list.append(amenity.to_dict())
     else:
         place_amenity = place.amenity_ids
-    for amenity in place_amenity:
-        amenity_list.append(amenity.to_dict())
+        for amen in place_amenity:
+            amenity_list.append(storage.get('Amenity', amen).to_dict())
     return jsonify(amenity_list)
 
 
 @app_views.route("/places/<uuid:place_id>/amenities/<uuid:amenity_id>",
                  methods=["DELETE"])
 def delete_place_amenity_object(place_id, amenity_id):
-    """Deletes place_amenity object
+    """Deletes a place_amenity object
     Args:
         place_id: id of the place in uuid format
         amenity_id: id of the amenity in uuid format
@@ -45,14 +47,16 @@ def delete_place_amenity_object(place_id, amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    place_amenity = list(amen for amen in place.amenities if
-                         amen.id == str(amenity_id))
-    if amenity not in place_amenity:
-        abort(404)
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        place.amenities.remove(place_amenity[0])
+        place_amenity = place.amenities
+        if amenity not in place_amenity:
+            abort(404)
+        place_amenity.remove(amenity)
     else:
-        place.amenity_ids.remove(place_amenity[0].id)
+        place_amenity = place.amenity_ids
+        if amenity_id not in place_amenity:
+            abort(404)
+        place_amenity.remove(amenity_id)
     place.save()
     return jsonify({}), 200
 
@@ -73,13 +77,15 @@ def post_place_amenity(place_id, amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    place_amenity = list(amen for amen in place.amenities if
-                         amen.id == str(amenity_id))
-    if place_amenity != []:
-        return jsonify(amenity.to_dict()), 200
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        place.amenities.append(amenity)
+        place_amenity = place.amenities
+        if amenity in place_amenity:
+            return jsonify(amenity.to_dict()), 200
+        place_amenity.append(amenity)
     else:
-        place.amenity_ids.append(amenity_id)
+        place_amenity = place.amenity_ids
+        if amenity_id in place_amenity:
+            return jsonify(amenity.to_dict()), 200
+        place_amenity.append(amenity_id)
     place.save()
     return jsonify(amenity.to_dict()), 201
