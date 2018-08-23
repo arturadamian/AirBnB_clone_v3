@@ -149,5 +149,5 @@ def get_places():
         for indiv in temp_place:
             place_list.append(indiv.to_dict())
     except Exception:
-        return jsonify({'error': 'Not a JSON'}), 400
+        abort(404)
     return jsonify(place_list)
