@@ -120,20 +120,19 @@ def get_places():
         if all_states == [] and all_cities == []:
             for indiv_place in storage.all("Place").values():
                 temp_place.add(indiv_place)
-        else:
-            json = request.get_json()
-            if all_states != []:
-                for indiv in all_states:
-                    state_indiv = storage.get("State", indiv)
-                    temp_cities = state_indiv.cities
-                    for indiv_city in temp_cities:
-                        for indiv_place in indiv_city.places:
-                            temp_place.add(indiv_place)
-            if all_cities != []:
-                for indiv in all_cities:
-                    city_indiv = storage.get("City", indiv)
-                    for indiv_place in city_indiv.places:
+        json = request.get_json()
+        if all_states != []:
+            for indiv in all_states:
+                state_indiv = storage.get("State", indiv)
+                temp_cities = state_indiv.cities
+                for indiv_city in temp_cities:
+                    for indiv_place in indiv_city.places:
                         temp_place.add(indiv_place)
+        if all_cities != []:
+            for indiv in all_cities:
+                city_indiv = storage.get("City", indiv)
+                for indiv_place in city_indiv.places:
+                    temp_place.add(indiv_place)
 
         all_amenities = json.get("amenities", [])
         if all_amenities != []:
@@ -151,4 +150,4 @@ def get_places():
             place_list.append(indiv.to_dict())
     except Exception:
         abort(404)
-    return jsonify(place_list), 200
+    return jsonify(place_list)
