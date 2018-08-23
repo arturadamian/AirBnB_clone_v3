@@ -142,8 +142,8 @@ def get_places():
                 all_amen_obj.add(storage.get("Amenity", indiv))
             for indiv_places in temp_copy:
                 amenities = indiv_places.amenities
-                for indiv_amen in amenities:
-                    if indiv_amen not in all_amen_obj:
+                for indiv_amen in all_amen_obj:
+                    if indiv_amen not in amenities:
                         temp_place.discard(indiv_places)
                         break
         for indiv in temp_place:
