@@ -103,12 +103,13 @@ def put_place(place_id):
     place.save()
     return jsonify(place.to_dict()), 200
 
+
 @app_views.route("/places_search", methods=["POST"])
 def get_places():
     """
     gets a list of all places requested
     """
-    temp_place=set()
+    temp_place = set()
     place_list = []
     if not request.json:
         abort(404)
@@ -131,7 +132,7 @@ def get_places():
             city_indiv = storage.get("City", indiv)
             for indiv_place in city_indiv.places:
                 temp_place.add(indiv_place)
-    
+
     all_amenities = json.get("amenities", [])
     if all_amenities != []:
         all_amen_obj = set()
