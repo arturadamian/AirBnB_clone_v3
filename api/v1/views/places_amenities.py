@@ -45,8 +45,7 @@ def delete_place_amenity_object(place_id, amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    place_amenity = place.amenities
-    place_amenity = list(amen for amen in place_amenity if
+    place_amenity = list(amen for amen in place.amenities if
                          amen.id == str(amenity_id))
     if amenity not in place_amenity:
         abort(404)
@@ -74,8 +73,7 @@ def post_place_amenity(place_id, amenity_id):
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
-    place_amenity = place.amenities
-    place_amenity = list(amen for amen in place_amenity if
+    place_amenity = list(amen for amen in place.amenities if
                          amen.id == str(amenity_id))
     if place_amenity != []:
         return jsonify(amenity.to_dict()), 200

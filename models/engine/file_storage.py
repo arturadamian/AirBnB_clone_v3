@@ -88,7 +88,7 @@ class FileStorage:
             Returns the object or None if not found
         """
         for key, value in self.__objects.items():
-            if cls in key and id in key:
+            if cls in key and str(id) in key:
                 return value
         return None
 
