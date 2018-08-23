@@ -102,3 +102,34 @@ def put_place(place_id):
             setattr(place, key, value)
     place.save()
     return jsonify(place.to_dict()), 200
+
+@app_views.route("/places_search", methods=["POST"])
+def get_places():
+    """
+    gets a list of all places requested
+    """
+    # keys = ("states", "cities", "amenities")
+    temp=set()
+    place_list = []
+    if not request.json:
+        for value in storage.all("Place").values():
+            temp.add(value)
+        for indiv in temp:
+            place_list.append(indiv.to_dict())
+        return jsonify(place_list), 200
+    json = request.get_json()
+    if json["states"] != []:
+        try:
+            for indiv in json["states"]:
+                print("indiv states", indiv)
+                state_indiv = storage.get("State", indiv)
+                print("state_indiv:", state_indiv)
+                all_cities = state_indiv.cities
+                print("all_cities:", all_cities)
+                for indiv_city in all_cities:
+                    for indiv_place in indiv_city.places:
+                        place_list.append(indiv_place.to_dict())
+        except:
+            abort(404)
+    print("THE LIST:", place_list)
+    return jsonify(place_list), 200
