@@ -120,40 +120,35 @@ def get_places():
         if all_states == [] and all_cities == []:
             for indiv_place in storage.all("Place").values():
                 temp_place.add(indiv_place)
-        json = request.get_json()
-        if all_states != []:
-            for indiv in all_states:
-                state_indiv = storage.get("State", indiv)
-                temp_cities = state_indiv.cities
-                for indiv_city in temp_cities:
-                    for indiv_place in indiv_city.places:
+        else:
+            json = request.get_json()
+            if all_states != []:
+                for indiv in all_states:
+                    state_indiv = storage.get("State", indiv)
+                    temp_cities = state_indiv.cities
+                    for indiv_city in temp_cities:
+                        for indiv_place in indiv_city.places:
+                            temp_place.add(indiv_place)
+            if all_cities != []:
+                for indiv in all_cities:
+                    city_indiv = storage.get("City", indiv)
+                    for indiv_place in city_indiv.places:
                         temp_place.add(indiv_place)
-        if all_cities != []:
-            for indiv in all_cities:
-                city_indiv = storage.get("City", indiv)
-                for indiv_place in city_indiv.places:
-                    temp_place.add(indiv_place)
 
         all_amenities = json.get("amenities", [])
         if all_amenities != []:
             all_amen_obj = set()
             temp_copy = temp_place.copy()
-            # print(temp_copy)
-            # print(len(temp_copy))
             for indiv in all_amenities:
                 all_amen_obj.add(storage.get("Amenity", indiv))
             for indiv_places in temp_copy:
                 amenities = indiv_places.amenities
                 for indiv_amen in amenities:
-                    # print("temp_place_indiv: ", indiv_amen, "\n")
-                    # print("all_amen_obj: ", all_amen_obj, "\n")
                     if indiv_amen not in all_amen_obj:
                         temp_place.discard(indiv_places)
-                        # print("temp place: ", temp_place, "\n")
                         break
         for indiv in temp_place:
             place_list.append(indiv.to_dict())
-        # print("place _LIST: ", place_list)
     except Exception:
         abort(404)
     return jsonify(place_list), 200
