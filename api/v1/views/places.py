@@ -112,8 +112,8 @@ def get_places():
     temp_place = set()
     place_list = []
     try:
-        if not request.json:
-            abort(404)
+        if request.get_json() is None:
+            return jsonify({'error': 'Not a JSON'}), 400
         json = request.get_json()
         all_states = json.get("states", [])
         all_cities = json.get("cities", [])
