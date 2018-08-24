@@ -41,6 +41,7 @@ def delete_place_amenity_object(place_id, amenity_id):
     Return:
         jsonified version of empty dictionary with status code 200
     """
+    return None
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
@@ -71,7 +72,6 @@ def post_place_amenity(place_id, amenity_id):
     Returns:
         jsonified version of amenity objecto
     """
-    return None
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
