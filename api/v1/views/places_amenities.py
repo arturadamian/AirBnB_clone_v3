@@ -71,6 +71,7 @@ def post_place_amenity(place_id, amenity_id):
     Returns:
         jsonified version of amenity objecto
     """
+    pass
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
