@@ -61,7 +61,7 @@ def delete_place_amenity_object(place_id, amenity_id):
     return jsonify({}), 200
 
 
-@app_views.route("/places/<string:place_id>/amenities/<string:amenity_id>",
+@app_views.route("/places/<uuid:place_id>/amenities/<uuid:amenity_id>",
                  methods=["POST"])
 def post_place_amenity(place_id, amenity_id):
     """Link a Amenity object to a Place
