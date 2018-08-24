@@ -71,21 +71,22 @@ def post_place_amenity(place_id, amenity_id):
     Returns:
         jsonified version of amenity objecto
     """
-    place = storage.get("Place", place_id)
-    if place is None:
+    all_places = storage.all("Place").values()
+    place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
+    if place_obj == []:
         abort(404)
-    amenity = storage.get("Amenity", amenity_id)
-    if amenity is None:
+    all_amenities = storage.all("Amenity").values()
+    amenity_obj = [obj.to_dict() for obj in all_amenities
+                   if obj.id == amenity_id]
+    if amenity_obj == []:
         abort(404)
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
-        place_amenity = place.amenities
-        if amenity in place_amenity:
-            return jsonify(amenity.to_dict()), 200
-        place_amenity.append(amenity)
-    else:
-        place_amenity = place.amenity_ids
-        if amenity_id in place_amenity:
-            return jsonify(amenity.to_dict()), 200
-        place_amenity.append(amenity_id)
-    place.save()
-    return jsonify(amenity.to_dict()), 201
+    amenities = []
+    for place in all_places:
+        if place.id == place_id:
+            for amenity in all_amenities:
+                if amenity.id == amenity_id:
+                    place.amenities.append(amenity)
+                    storage.save()
+                    amenities.append(amenity.to_dict())
+                    return jsonify(amenities[0]), 200
+    return jsonify(amenities[0]), 201
