@@ -16,19 +16,6 @@ def get_all_amenities_by_place(place_id):
     Return:
         jsonified version of the amenity list
     """
-    all_places = storage.all("Place").values()
-    print(all_places)
-    place_obj = [obj.to_dict() for obj in all_places if obj.id == str(place_id)]
-    print(place_obj)
-    if place_obj == []:
-        abort(404)
-    list_amenities = []
-    for obj in all_places:
-        if obj.id == str(place_id):
-            for amenity in obj.amenities:
-                list_amenities.append(amenity.to_dict())
-    return jsonify(list_amenities)
-    """
     place = storage.get("Place", place_id)
     if place is None:
         abort(404)
@@ -42,7 +29,6 @@ def get_all_amenities_by_place(place_id):
         for amen in place_amenity:
             amenity_list.append(storage.get('Amenity', amen).to_dict())
     return jsonify(amenity_list)
-    """
 
 
 @app_views.route("/places/<uuid:place_id>/amenities/<uuid:amenity_id>",
